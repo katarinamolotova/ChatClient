@@ -20,16 +20,16 @@ namespace ChatClient
             client = new TcpClient();
             try
             {
-                client.Connect(host, port); //  подключение клиента
-                stream = client.GetStream(); //  получаем поток
+                client.Connect(host, port);  //  connecting the client
+                stream = client.GetStream();
 
                 string message = userName;
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 stream.Write(data, 0, data.Length);
 
-                // запускаем новый поток для получения данных
+                //  starting a new thread to get data
                 Thread receiveThread = new Thread(new ThreadStart(ReceiveMessage));
-                receiveThread.Start();  //  старт потока
+                receiveThread.Start();
                 Console.WriteLine("Добро пожаловать, {0}", userName);
                 SendMessage();
             }
@@ -42,7 +42,7 @@ namespace ChatClient
                 Disconnect();
             }
         }
-        //  отправка сообщений
+        
         static void SendMessage()
         {
             Console.WriteLine("Введите сообщение: ");
@@ -54,14 +54,14 @@ namespace ChatClient
                 stream.Write(data, 0, data.Length);
             }
         }
-        //  получение сообщений
+        
         static void ReceiveMessage()
         {
             while (true)
             {
                 try
                 {
-                    byte[] data = new byte[64]; // буфер для получаемых данных
+                    byte[] data = new byte[64]; // buffer for received data
                     StringBuilder builder = new StringBuilder();
                     int bytes = 0;
                     do
@@ -72,7 +72,7 @@ namespace ChatClient
                     while (stream.DataAvailable);
 
                     string message = builder.ToString();
-                    Console.WriteLine(message);  //  вывод сообщения
+                    Console.WriteLine(message);
                 }
                 catch
                 {
@@ -86,10 +86,10 @@ namespace ChatClient
         static void Disconnect()
         {
             if (stream != null)
-                stream.Close();  //  отключение потока
+                stream.Close();  //  disconnect the stream
             if (client != null)
-                client.Close();  //  отключение клиента
-            Environment.Exit(0);  //  завершение процесса
+                client.Close();  //  disconnect the ckient
+            Environment.Exit(0);  //  completing the process
         }
     }
 }
